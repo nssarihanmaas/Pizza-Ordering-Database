@@ -1,12 +1,11 @@
 import datetime
-from dataHandler import*
+from dataHandler import *
 from mysql.connector import Error
 from loginDataHandler import currentCustomer
 
 
 class orderHandlder:
-
-    global query 
+    global query
     query = []
 
     def clear_query(self):
@@ -37,16 +36,15 @@ class orderHandlder:
         """
         parts = base_query.split('%s')
 
-        item_query = parts[0] + '%s' + parts[1] + itemType + parts[2] + str(itemID) + parts[3] + str(itemPrice) + parts[4] 
+        item_query = parts[0] + '%s' + parts[1] + itemType + parts[2] + str(itemID) + parts[3] + str(itemPrice) + parts[
+            4]
 
         query.append(item_query)
 
     def placeOrder(self):
-        
+
         customerID = current_customer
         connection = PizzaDataHandler().connection
-
-
 
         try:
 
@@ -59,8 +57,8 @@ class orderHandlder:
                 VALUES (%s, %s, %s)
             """
             values = (customerID, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'Placed')
-            cursor.execute(ticket_query,values)
-            
+            cursor.execute(ticket_query, values)
+
             # orderticket_query = query[0]
             # final_orderticket_queary = orderticket_query % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), "Placed")
             # cursor.execute(final_orderticket_queary)
@@ -73,9 +71,9 @@ class orderHandlder:
 
             # Execute remaining queries
             for q in query[1:]:
-                cursor.execute(q,orderID)
-            
-            connection.commit() 
+                cursor.execute(q, orderID)
+
+            connection.commit()
 
         except Error as e:
             print(f"Error: {e}")
