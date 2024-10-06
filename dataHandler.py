@@ -20,6 +20,15 @@ class PizzaDataHandler:
             messagebox.showerror("Error", f"An error occurred while fetching pizza options: {str(e)}")
             return []
 
+    def fetch_sideitem_options(self):
+        """Fetch item names from the database to populate the ComboBox."""
+        try:
+            self.cursor.execute("SELECT Name FROM standartmenuitem")
+            return [row[0] for row in self.cursor.fetchall()]
+        except Exception as e:
+            messagebox.showerror("Error", f"An error occurred while fetching pizza options: {str(e)}")
+            return []
+
     def get_pizza_id(self, pizza_name):
         """Fetches the Pizza ID based on the pizza name."""
         try:
@@ -28,7 +37,16 @@ class PizzaDataHandler:
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred while fetching pizza ID: {str(e)}")
             return None
-
+        
+    def get_side_info(self, side_name):
+        """Fetches the Side item ID based on the name."""
+        try:
+            self.cursor.execute("SELECT * FROM standartmenuitem WHERE Name = %s", (side_name,))
+            return self.cursor.fetchone()
+        except Exception as e:
+            messagebox.showerror("Error", f"An error occurred while fetching pizza ID: {str(e)}")
+            return None
+        
     def get_ingredients(self, pizza_id):
         """Fetches the ingredients associated with the given Pizza ID."""
         try:

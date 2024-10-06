@@ -1,32 +1,16 @@
 import datetime
-from dataHandler import *
+from dataHandler import*
 from mysql.connector import Error
-from loginDataHandler import currentCustomer
+from loginDataHandler import current_customer
 
 
 class orderHandlder:
-    global query
+
+    global query 
     query = []
 
-    def clear_query(self):
+    def clear_query():
         query.clear()
-        # del query[1:]
-
-    # def generateOrderTicket():
-    #     customerID = current_customer
-    #     #adds customer in one sql query
-
-    #     # Prepare the INSERT statement
-    #     base_query = """
-    #         INSERT INTO orderticket (CustomerID, OrderDate, Status)
-    #         VALUES (%s, %s, %s)
-    #     """
-
-    #     # Splitting the string at the first occurrence of %s
-    #     parts = base_query.split('%s', 1)
-    #     orderticket_query = parts[0] + str(customerID)  + parts[1]
-
-    #     query.append(orderticket_query) 
 
     def addOrderItem(itemID, itemType, itemPrice):
 
@@ -36,13 +20,12 @@ class orderHandlder:
         """
         parts = base_query.split('%s')
 
-        item_query = parts[0] + '%s' + parts[1] + itemType + parts[2] + str(itemID) + parts[3] + str(itemPrice) + parts[
-            4]
-
+        item_query = parts[0] + '%s' + parts[1] + itemType + parts[2] + str(itemID) + parts[3] + str(itemPrice) + parts[4] 
+        
         query.append(item_query)
 
-    def placeOrder(self):
-
+    def placeOrder():
+        
         customerID = current_customer
         connection = PizzaDataHandler().connection
 
@@ -57,23 +40,20 @@ class orderHandlder:
                 VALUES (%s, %s, %s)
             """
             values = (customerID, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'Placed')
-            cursor.execute(ticket_query, values)
-
-            # orderticket_query = query[0]
-            # final_orderticket_queary = orderticket_query % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), "Placed")
-            # cursor.execute(final_orderticket_queary)
+            cursor.execute(ticket_query,values)
 
             # Retrieve the newly created orders id
-            fetch_orderID_query = "SELECT OrderID FROM orderticket WHERE CustomerID = %s ORDER BY OrderDate DESC LIMIT 1;"
-            cursor.execute(fetch_orderID_query, (customerID))
+            fetch_orderID_query = "SELECT OrderID FROM orderticket WHERE CustomerID = " + str(customerID) + " ORDER BY OrderDate DESC LIMIT 1;"
+            cursor.execute(fetch_orderID_query)
 
             orderID = cursor.fetchone()
 
-            # Execute remaining queries
-            for q in query[1:]:
-                cursor.execute(q, orderID)
-
-            connection.commit()
+            #Execute remaining queries
+            for q in query:
+                inserted_q = q % orderID[0]
+                cursor.execute(inserted_q)
+            
+            connection.commit() 
 
         except Error as e:
             print(f"Error: {e}")
