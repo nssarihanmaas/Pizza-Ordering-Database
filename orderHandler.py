@@ -24,6 +24,25 @@ class orderHandlder:
         
         query.append(item_query)
 
+    def deleteOrder():
+
+        connection = PizzaDataHandler().connection
+
+        try:
+            cursor = connection.cursor()
+
+            item_deletion_query ="DELETE FROM orderitem WHERE OrderID = " + str(orderID[0]) +" ;"
+            ticket_deletion_query ="DELETE FROM orderitem WHERE OrderID = " + str(orderID[0]) +" ;"
+            cursor.execute(item_deletion_query)
+            cursor.execute(ticket_deletion_query)
+
+            connection.commit() 
+        except Error as e:
+            print(f"Error: {e}")
+            # Rollback in case of error
+            if connection.is_connected():
+                connection.rollback()
+
     def placeOrder():
         
         customerID = current_customer
@@ -46,6 +65,7 @@ class orderHandlder:
             fetch_orderID_query = "SELECT OrderID FROM orderticket WHERE CustomerID = " + str(customerID) + " ORDER BY OrderDate DESC LIMIT 1;"
             cursor.execute(fetch_orderID_query)
 
+            global orderID
             orderID = cursor.fetchone()
 
             #Execute remaining queries
@@ -60,6 +80,8 @@ class orderHandlder:
             # Rollback in case of error
             if connection.is_connected():
                 connection.rollback()
+
+
 
 
 

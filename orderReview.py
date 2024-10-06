@@ -23,10 +23,11 @@ orderPlacedText.grid(row=2, column=0, padx=10, pady=10)
 orderPlacedText.insert(tk.END, f"Your order is placed")
 orderPlacedText.insert(tk.END, "-"*37 + "\n")  # Divider line for clarity
 
+def cancel():
+    orderHandlder.deleteOrder()
 
 
-
-deleteOrderButton=CTkButton(leftFrame2, text='Reset',cursor='hand2')
+deleteOrderButton=CTkButton(leftFrame2, text='Reset',cursor='cancel')
 deleteOrderButton.grid(row=3,column=0,padx=30,pady=10)
 
 window2.mainloop()
