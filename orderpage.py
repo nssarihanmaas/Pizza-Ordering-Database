@@ -129,6 +129,7 @@ def reset_order_review():
 
 
 def place_order():
+    window.destroy()
     import orderReview
     orderHandlder.placeOrder()
 
