@@ -18,6 +18,11 @@ class LoginHandler:
             # Adjust the SQL query to match your table structure and column names
             self.cursor.execute("SELECT * FROM Customer WHERE Name = %s AND Password = %s", (username, password))
             result = self.cursor.fetchone()
+            
+            # Make customer id accessable by other parts of the program
+            global current_customer
+            current_customer = result[0]
+
             return result is not None
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred while verifying credentials: {str(e)}")
