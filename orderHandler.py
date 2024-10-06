@@ -1,7 +1,7 @@
 import datetime
 from dataHandler import*
 from mysql.connector import Error
-from loginDataHandler import current_customer
+from loginDataHandler import *
 
 
 class orderHandlder:

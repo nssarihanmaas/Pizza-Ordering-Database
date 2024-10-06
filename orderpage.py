@@ -129,6 +129,7 @@ def reset_order_review():
 
 
 def place_order():
+    import orderReview
     orderHandlder.placeOrder()
 
 resetButton=CTkButton(rightFrame, text='Reset',cursor='hand2', command=reset_order_review)
