@@ -40,9 +40,9 @@ orderPlacedText.insert(tk.END, "-" * 37 + "\n")
 def cancel():
     orderHandlder.deleteOrder()
 
-countdown(3)
+countdown(300)
 
-deleteOrderButton=CTkButton(leftFrame2, text='Reset',cursor='cancel')
+deleteOrderButton=CTkButton(leftFrame2, text='Reset',cursor='hand2', command=cancel)
 deleteOrderButton.grid(row=3,column=0,padx=30,pady=10)
 
 window2.mainloop()
