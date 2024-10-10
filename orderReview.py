@@ -1,3 +1,4 @@
+from datetime import timedelta
 from customtkinter import *
 import tkinter as tk
 from tkinter import messagebox
@@ -6,19 +7,43 @@ from connection import create_connection
 from dataHandler import *
 from orderHandler import *
 
-def countdown(time_remaining):
-    minutes, seconds = divmod(time_remaining, 60)
-    time_str = f'{minutes:02}:{seconds:02}'
-    
-    orderPlacedText.delete('1.0', tk.END)
-    orderPlacedText.insert(tk.END, f"Your order is placed. \nTime remaining to cancel: {time_str}")
-
-    if time_remaining > 0:
-        window2.after(1000, countdown, time_remaining - 1)
+def get_order_time(OrderID):
+    connection = create_connection()
+    if connection:
+        cursor = connection.cursor()
+        query = "SELECT OrderDate FROM orderticket WHERE OrderID = %s"
+        cursor.execute(query, (OrderID,))
+        result = cursor.fetchone()
+        connection.close()
+        return result[0] if result else None
     else:
-        deleteOrderButton.grid_forget()
-        orderPlacedText.insert(tk.END, "\nCancellation window closed.\n")
-        orderPlacedText.insert(tk.END, "\nYour order is in process.\n")
+        print("Database connection failed.")
+        return None
+    
+
+def countdown(order_id):
+    order_time = get_order_time(order_id)
+    
+    if order_time:
+        # Add 5 minutes to the order time
+        cancel_window_end = order_time + timedelta(minutes=5)
+        current_time = datetime.now()
+        time_remaining = int((cancel_window_end - current_time).total_seconds())
+        
+        if time_remaining > 0:
+            minutes, seconds = divmod(time_remaining, 60)
+            time_str = f'{minutes:02}:{seconds:02}'
+            
+            orderPlacedText.delete('1.0', tk.END)
+            orderPlacedText.insert(tk.END, f"Your order is placed. \nTime remaining to cancel: {time_str}")
+
+            window2.after(1000, lambda: countdown(order_id))
+        else:
+            deleteOrderButton.grid_forget()
+            orderPlacedText.insert(tk.END, "\nCancellation window closed.\n")
+            orderPlacedText.insert(tk.END, "\nYour order is in process.\n")
+    else:
+        orderPlacedText.insert(tk.END, "\nOrder not found.\n")
 
 window2 = CTk()
 window2.geometry('350x430')
@@ -39,6 +64,7 @@ orderPlacedText.insert(tk.END, "-" * 37 + "\n")
 
 def cancel():
     orderHandlder.deleteOrder()
+    window2.destroy()
 
 countdown(300)
 
