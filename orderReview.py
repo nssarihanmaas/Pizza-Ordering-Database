@@ -21,8 +21,8 @@ def get_order_time(OrderID):
         return None
     
 
-def countdown(order_id):
-    order_time = get_order_time(order_id)
+def countdown(OrderID):
+    order_time = get_order_time(OrderID)
     
     if order_time:
         # Add 5 minutes to the order time
@@ -37,7 +37,7 @@ def countdown(order_id):
             orderPlacedText.delete('1.0', tk.END)
             orderPlacedText.insert(tk.END, f"Your order is placed. \nTime remaining to cancel: {time_str}")
 
-            window2.after(1000, lambda: countdown(order_id))
+            window2.after(1000, lambda: countdown(OrderID))
         else:
             deleteOrderButton.grid_forget()
             orderPlacedText.insert(tk.END, "\nCancellation window closed.\n")
