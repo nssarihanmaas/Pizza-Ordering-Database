@@ -151,6 +151,31 @@ class PizzaDataHandler:
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred while calculating the pizza price: {str(e)}")
             return 0
+        
+    def fetch_sideitem_price(self, side_item_name):
+        """
+        Fetches the price of a specific side item based on its name.
+        """
+        try:
+            # Step 1: Fetch the price of the side item from the standartmenuitem table
+            self.cursor.execute("""
+                SELECT Price
+                FROM standartmenuitem
+                WHERE Name = %s
+            """, (side_item_name,))
+            
+            # Fetch the price
+            side_item_price = self.cursor.fetchone()
+
+            if side_item_price:
+                return round(Decimal(side_item_price[0]), 2)  # Round to 2 decimal places
+            else:
+                raise ValueError(f"No side item found with the name '{side_item_name}'")
+            
+        except Exception as e:
+            messagebox.showerror("Error", f"An error occurred while fetching the side item price: {str(e)}")
+            return 0
+
 
     def close_connection(self):
         """Closes the cursor and the database connection."""

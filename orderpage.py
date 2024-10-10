@@ -87,6 +87,20 @@ def showingredient():
     else:
         ingredientsText.insert(tk.END, f"No ingredients found for '{selected_pizza}'.")
 
+    # Fetch and display the side menu item price
+    selected_side_item = sideOptionsBox.get()  # Get the selected side item from the ComboBox
+
+    if selected_side_item:
+        side_item_price = data_handler.fetch_sideitem_price(selected_side_item)  # Fetch side item price
+        if side_item_price:
+            ingredientsText.insert(tk.END, f"\nSelected Side Item:\nName: {selected_side_item}\nPrice: ${side_item_price:.2f}\n")
+        else:
+            ingredientsText.insert(tk.END, f"No side item found with the name '{selected_side_item}'.")
+
+
+
+
+
 def add_to_order_review():
     # Get the selected pizza and side item
     selected_pizza = pizzaOptionsBox.get()
