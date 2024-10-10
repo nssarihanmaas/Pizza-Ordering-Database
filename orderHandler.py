@@ -52,7 +52,19 @@ class orderHandlder:
             for q in query:
                 inserted_q = q % orderID[0]
                 cursor.execute(inserted_q)
+
+            #Update order price
+            # fetch all orderitem rows
+            fetch_all_items_query = "SELECT SUM(ItemPrice) AS price FROM orderitem WHERE OrderID = %s;"
+            cursor.execute(fetch_all_items_query, orderID)
+
+            result = cursor.fetchone()
+            total = result[0]
             
+            update_query = "UPDATE orderticket SET TotalPrice = %s WHERE OrderID = %s"
+            values = (total, orderID[0])
+            cursor.execute(update_query, values)
+
             connection.commit() 
 
         except Error as e:
