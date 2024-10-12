@@ -5,6 +5,7 @@ from customtkinter import CTk, CTkButton, CTkLabel, CTkComboBox
 from connection import create_connection
 from dataHandler import*
 from orderHandler import*
+from discountChecker import*
 
 data_handler = PizzaDataHandler()
 
@@ -13,6 +14,9 @@ if data_handler.connection is None:
     print("Failed to connect to the database.")
 else:
     print("Connected to the database successfully.")
+
+# Check if birthday
+is_birthday = check_if_birthday()
 
 window=CTk()
 window.geometry('700x430')
@@ -27,6 +31,10 @@ rightFrame.grid(row=6,column=8)
 
 orderReviewLabel=CTkLabel(rightFrame,text='Your Order Review:',font=('Arial',18,'bold'),width=50)
 orderReviewLabel.grid(row=0,column=0,padx=10,pady=10)
+
+if(is_birthday):
+    birthdayLabel = CTkLabel(rightFrame,text='Happy birthday! Your discount is €10',font=('Arial',15,'bold'),width=50)
+    birthdayLabel.grid(row=1,column=0,padx=10,pady=10)
 
 orderReviewText = tk.Text(rightFrame, height=10, width=37, wrap="word")
 orderReviewText.grid(row=2, column=0, padx=10, pady=10)
@@ -83,7 +91,7 @@ def showingredient():
                 ingredientsText.insert(tk.END, f"This pizza is not vegetarian.\n")
 
         final_price = data_handler.calculate_pizza_price(pizza_id)
-        ingredientsText.insert(tk.END, f"The final price for {selected_pizza} is: ${final_price:.2f}\n")
+        ingredientsText.insert(tk.END, f"The final price for {selected_pizza} is: €{final_price:.2f}\n")
     else:
         ingredientsText.insert(tk.END, f"No ingredients found for '{selected_pizza}'.")
 
