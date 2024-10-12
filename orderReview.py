@@ -37,10 +37,6 @@ def reset_order():
     # Close the cursor and connection after the query
     cursor.close()
     conn.close()
-    
-    # Inform the user that the order has been cancelled
-    orderPlacedText.insert(tk.END, f"Your order has been cancelled.\n")
-    orderPlacedText.insert(tk.END, "-"*33 + "\n")
 
 orderPlacedText.insert(tk.END, f"Your order is placed")
 orderPlacedText.insert(tk.END, "-"*33 + "\n")

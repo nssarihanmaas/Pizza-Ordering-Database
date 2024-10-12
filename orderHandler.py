@@ -46,6 +46,7 @@ class orderHandlder:
             fetch_orderID_query = "SELECT OrderID FROM orderticket WHERE CustomerID = " + str(customerID) + " ORDER BY OrderDate DESC LIMIT 1;"
             cursor.execute(fetch_orderID_query)
 
+            global orderID
             orderID = cursor.fetchone()
 
             #Execute remaining queries
