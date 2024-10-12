@@ -2,6 +2,8 @@ import datetime
 from dataHandler import*
 from mysql.connector import Error
 from loginDataHandler import current_customer
+from discountChecker import check_if_birthday
+
 
 
 class orderHandlder:
@@ -65,6 +67,13 @@ class orderHandlder:
             update_query = "UPDATE orderticket SET TotalPrice = %s WHERE OrderID = %s"
             values = (total, orderID[0])
             cursor.execute(update_query, values)
+
+            # Apply discount if applicable 
+
+            if(check_if_birthday()):
+                discount_query = "UPDATE orderticket SET DiscountApplied = %s WHERE OrderID = %s"
+                values = (10, orderID[0])
+                cursor.execute(discount_query,values)
 
             connection.commit() 
 

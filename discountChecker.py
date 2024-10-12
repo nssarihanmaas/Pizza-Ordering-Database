@@ -5,7 +5,6 @@ from loginDataHandler import current_customer
 
 def check_if_birthday():
 
-    print("check_if_birthday called")
 
     customerID = current_customer
     connection = PizzaDataHandler().connection
@@ -22,10 +21,8 @@ def check_if_birthday():
         WHERE CustomerID = %s;
         """
         cursor.execute(birthday_query,(customerID,))
-        print(birthday_query)
 
         result = cursor.fetchone()
-
         birthdate = result[0]
 
         # get todays date

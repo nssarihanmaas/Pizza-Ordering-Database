@@ -16,7 +16,9 @@ else:
     print("Connected to the database successfully.")
 
 # Check if birthday
+
 is_birthday = check_if_birthday()
+
 
 window=CTk()
 window.geometry('700x430')
