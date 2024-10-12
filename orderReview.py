@@ -1,4 +1,5 @@
 from datetime import timedelta
+import importlib
 from customtkinter import*
 from customtkinter import *
 import tkinter as tk
@@ -37,6 +38,16 @@ def reset_order():
     # Close the cursor and connection after the query
     cursor.close()
     conn.close()
+
+def terminate_and_import():
+    # Import the new file here
+    # Replace 'new_file_name' with the actual name of the file you want to import
+    window2.destroy()
+    new_module = importlib.import_module('login.py')
+
+
+# Schedule the termination and import after 5 minutes (300,000 milliseconds)
+window2.after(3000, terminate_and_import)
 
 orderPlacedText.insert(tk.END, f"Your order is placed")
 orderPlacedText.insert(tk.END, "-"*33 + "\n")
