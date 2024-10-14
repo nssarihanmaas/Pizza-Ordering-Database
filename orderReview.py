@@ -33,7 +33,7 @@ def reset_order():
     
     # Inform the user that the order has been cancelled
     orderPlacedText.insert(tk.END, f"Your order has been cancelled.\n")
-    orderPlacedText.insert(tk.END, "-"*33 + "\n")
+    orderPlacedText.insert(tk.END, "-"*31 + "\n")
     
     # Close the cursor and connection after the query
     cursor.close()
@@ -43,7 +43,7 @@ def terminate_and_import():
     # Import the new file here
     # Replace 'new_file_name' with the actual name of the file you want to import
     window2.destroy()
-    new_module = importlib.import_module('login.py')
+    import deliveryTrackingPage
 
 
 # Schedule the termination and import after 5 minutes (300,000 milliseconds)
