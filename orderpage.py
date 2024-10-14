@@ -15,9 +15,9 @@ if data_handler.connection is None:
 else:
     print("Connected to the database successfully.")
 
-# Check if birthday
-
-is_birthday = check_if_birthday()
+# Check for discounts
+is_birthday = TRUE #check_if_birthday()
+is_discounted = check_if_11th_order()
 
 
 window=CTk()
@@ -35,11 +35,15 @@ orderReviewLabel=CTkLabel(rightFrame,text='Your Order Review:',font=('Arial',18,
 orderReviewLabel.grid(row=0,column=0,padx=10,pady=10)
 
 if(is_birthday):
-    birthdayLabel = CTkLabel(rightFrame,text='Happy birthday! Your discount is €10',font=('Arial',15,'bold'),width=50)
+    birthdayLabel = CTkLabel(rightFrame,text='Happy birthday! Have a free side!',font=('Arial',15,'bold'),width=50)
     birthdayLabel.grid(row=1,column=0,padx=10,pady=10)
 
+if(is_discounted):
+    birthdayLabel = CTkLabel(rightFrame,text='You have a 10% discount on this order!',font=('Arial',15,'bold'),width=50)
+    birthdayLabel.grid(row=2,column=0,padx=10,pady=10)
+
 orderReviewText = tk.Text(rightFrame, height=10, width=37, wrap="word")
-orderReviewText.grid(row=2, column=0, padx=10, pady=10)
+orderReviewText.grid(row=3, column=0, padx=10, pady=10)
 
 pizzaPickingLabel=CTkLabel(leftFrame,text='Pick your pizza!',font=('Arial',18,'bold'),width=50)
 pizzaPickingLabel.grid(row=0,column=2,padx=30,pady=10)
@@ -144,10 +148,10 @@ def place_order():
     import orderReview
 
 resetButton=CTkButton(rightFrame, text='Reset',cursor='hand2', command=reset_order_review)
-resetButton.grid(row=3,column=0,padx=30,pady=10)
+resetButton.grid(row=4,column=0,padx=30,pady=10)
 
 placeButton=CTkButton(rightFrame, text='Place Order',cursor='hand2', command=place_order)
-placeButton.grid(row=4,column=0,padx=30,pady=10)
+placeButton.grid(row=5,column=0,padx=30,pady=10)
 
 showIngredientButton=CTkButton(leftFrame, text='Ingredients',cursor='hand2', command=showingredient)
 showIngredientButton.grid(row=3,column=2,padx=30,pady=10)
