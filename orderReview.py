@@ -50,7 +50,6 @@ def terminate_and_import():
 window2.after(3000, terminate_and_import)
 
 orderPlacedText.insert(tk.END, f"Your order is placed")
-orderPlacedText.insert(tk.END, "-"*33 + "\n")
 
 orderPlacedLabel=CTkLabel(leftFrame2,text='Your Order Placed:',font=('Arial',18,'bold'),width=50)
 orderPlacedLabel.grid(row=0,column=0,padx=10,pady=10)
