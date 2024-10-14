@@ -60,7 +60,7 @@ def update():
                 delivery_person_id, last_order = delivery_person
 
                 # Check if 30 minutes have passed since the last order
-                if last_order is None or (datetime.datetime.now() - last_order >= timedelta(minutes=2)) or (datetime.datetime.now() - last_order <= timedelta(minutes=1)):
+                if last_order is None or (datetime.datetime.now() - last_order >= timedelta(minutes=30)) or (datetime.datetime.now() - last_order <= timedelta(minutes=3)):
                     # Insert the assignment into the deliveryassignment table
                     insert_assignment = "INSERT INTO deliveryassignment (OrderID, DeliveryPersonID) VALUES (%s, %s);"
                     cursor.execute(insert_assignment, (orderID[0], delivery_person_id))

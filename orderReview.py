@@ -47,7 +47,7 @@ def terminate_and_import():
 
 
 # Schedule the termination and import after 5 minutes (300,000 milliseconds)
-window2.after(3000, terminate_and_import)
+window2.after(300000, terminate_and_import)
 
 orderPlacedText.insert(tk.END, f"Your order is placed")
 
