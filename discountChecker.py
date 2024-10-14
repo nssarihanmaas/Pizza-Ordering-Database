@@ -38,3 +38,28 @@ def check_if_birthday():
 
     except Error as e:
         print(f"Error accessing database: {e}")
+
+def check_if_11th_order():
+
+    customerID = current_customer
+    connection = PizzaDataHandler().connection
+
+    try:
+        cursor = connection.cursor()
+
+         # select the birthday column of the customer
+
+        count_query = "SELECT pizza_order_count FROM discount WHERE customer_id = %s;"
+    
+        cursor.execute(count_query, (customerID,))
+
+        result = cursor.fetchone()
+        count =  result[0]
+
+        if count > 9:
+            return True
+
+        return False
+    except Error as e:
+        print(f"Error accessing database: {e}")
+    
