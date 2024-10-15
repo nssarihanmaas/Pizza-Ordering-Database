@@ -34,8 +34,6 @@ class orderHandlder:
 
             cursor = connection.cursor()
 
-            # Create the order ticket so the order id can be used to create order item relations
-
             ticket_query = """
                 INSERT INTO orderticket (CustomerID, OrderDate, Status)
                 VALUES (%s, %s, %s)
@@ -43,19 +41,17 @@ class orderHandlder:
             values = (customerID, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'Placed')
             cursor.execute(ticket_query,values)
 
-            # Retrieve the newly created orders id
             fetch_orderID_query = "SELECT OrderID FROM orderticket WHERE CustomerID = " + str(customerID) + " ORDER BY OrderDate DESC LIMIT 1;"
             cursor.execute(fetch_orderID_query)
 
             global orderID
             orderID = cursor.fetchone()
 
-            #Execute remaining queries
             for q in query:
                 inserted_q = q % orderID[0]
                 cursor.execute(inserted_q)
 
-            #Update order price
+            
             # fetch all orderitem rows
             fetch_all_items_query = "SELECT SUM(ItemPrice) AS price FROM orderitem WHERE OrderID = %s;"
             cursor.execute(fetch_all_items_query, orderID)
@@ -67,7 +63,7 @@ class orderHandlder:
             values = (total, orderID[0])
             cursor.execute(update_query, values)
 
-            # Apply discount if applicable 
+            # if ther is discount apply it
 
             if(check_if_birthday()):
                 #fetchs free item price
@@ -92,7 +88,7 @@ class orderHandlder:
                 cursor.execute(discount_query, (discount_amount, orderID[0]))
                 print(cursor.statement)
 
-            # increment order count
+            
             increment_query = "UPDATE discount SET pizza_order_count = pizza_order_count + 1 WHERE customer_id = %s"
             cursor.execute(increment_query,(customerID,))
 
@@ -101,7 +97,6 @@ class orderHandlder:
 
         except Error as e:
             print(f"Error: {e}")
-            # Rollback in case of error
             if connection.is_connected():
                 connection.rollback()
 

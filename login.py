@@ -22,7 +22,7 @@ def handle_login():
     username = usernameEntry.get()
     password = passwordEntry.get()
 
-    # Validate credentials using the LoginHandler
+    # check credentials using the LoginHandler
     if login_handler.verify_credentials(username, password):
         messagebox.showinfo("Login Successful", "Welcome!")
         root.destroy()

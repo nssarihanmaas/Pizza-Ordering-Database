@@ -26,27 +26,26 @@ def reset_order():
     conn = create_connection()  
     cursor = conn.cursor()
 
-    # Update iscancelled field in the orderticket table
+    # updates isCancelled field in the orderticket table
     query_cancel_order = "UPDATE orderticket SET IsCancelled = TRUE WHERE orderID = %s"
     cursor.execute(query_cancel_order, orderID)
     conn.commit()
     
-    # Inform the user that the order has been cancelled
+    
     orderPlacedText.insert(tk.END, f"Your order has been cancelled.\n")
     orderPlacedText.insert(tk.END, "-"*31 + "\n")
     
-    # Close the cursor and connection after the query
+    
     cursor.close()
     conn.close()
 
 def terminate_and_import():
-    # Import the new file here
-    # Replace 'new_file_name' with the actual name of the file you want to import
+    
     window2.destroy()
     import deliveryTrackingPage
 
 
-# Schedule the termination and import after 5 minutes (300,000 milliseconds)
+#it terminates the window and imports after 5 minutes
 window2.after(300000, terminate_and_import)
 
 orderPlacedText.insert(tk.END, f"Your order is placed")

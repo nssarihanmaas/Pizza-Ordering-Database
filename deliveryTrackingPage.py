@@ -29,7 +29,7 @@ def update():
     try:
         cursor = connection.cursor()
 
-        # Check if orderID exists in the deliveryassignment table
+        # check if order id exists in the deliveryassignment table
         assignment_query = "SELECT * FROM deliveryassignment WHERE OrderID = %s;"
         cursor.execute(assignment_query, orderID)
         result = cursor.fetchone()
@@ -37,7 +37,7 @@ def update():
         assignee = "We will assign a delivery person shortly..."
 
         if result is None:
-            # No delivery person assigned yet, fetch customer area code
+            # no delivery person assigned yet then fetch customer area code
             customer_query = """
                 SELECT c.areaCode 
                 FROM orderticket o 
@@ -47,7 +47,7 @@ def update():
             cursor.execute(customer_query, orderID)
             customer_area = cursor.fetchone()[0]
 
-            # Find a delivery person assigned to the same area and check last_order time
+            # find a delivery person assigned to the same area and check last order time from the table
             delivery_person_query = """
                 SELECT DeliveryPersonID, last_order 
                 FROM deliveryperson 
@@ -59,39 +59,38 @@ def update():
             for delivery_person in delivery_persons:
                 delivery_person_id, last_order = delivery_person
 
-                # Check if 30 minutes have passed since the last order
+                # Check if 30 minutes have passed since the last order and insert the assignee
                 if last_order is None or (datetime.datetime.now() - last_order >= timedelta(minutes=30)) or (datetime.datetime.now() - last_order <= timedelta(minutes=3)):
-                    # Insert the assignment into the deliveryassignment table
+                    
                     insert_assignment = "INSERT INTO deliveryassignment (OrderID, DeliveryPersonID) VALUES (%s, %s);"
                     cursor.execute(insert_assignment, (orderID[0], delivery_person_id))
                     connection.commit()
 
-                    # Update the last_order time
+                    
                     update_last_order = "UPDATE deliveryperson SET last_order = NOW() WHERE DeliveryPersonID = %s;"
                     cursor.execute(update_last_order, (delivery_person_id,))
                     connection.commit()
 
-                    # Retrieve the assignee name
+                    
                     cursor.execute("SELECT Name FROM deliveryperson WHERE DeliveryPersonID = %s;", (delivery_person_id,))
                     assignee = cursor.fetchone()[0]
 
-                    break  # Exit the loop after assigning a delivery person
+                    break  
 
         else:
             assignee_id = result[1]
 
-            # Select the assignee name
+            # Select the assignee name and updat the status
             cursor.execute("SELECT Name FROM deliveryperson WHERE DeliveryPersonID = %s;", (assignee_id,))
             result = cursor.fetchone()
             assignee = result[0]
 
-        # Update status
-        # Clear the text box and insert the new status
+        
         progressText.delete(1.0, tk.END)
         progressText.insert(tk.END, f"Your order is in progress.")
         progressText.insert(tk.END, f"\nDelivery Person: " + assignee)
 
-        # Schedule the next update in 5 seconds (5000 milliseconds)
+        # Update it every 5 seconds
         window3.after(5000, update)
 
     except Error as e:

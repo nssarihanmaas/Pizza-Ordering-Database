@@ -9,7 +9,6 @@ from discountChecker import*
 
 data_handler = PizzaDataHandler()
 
-# Check connection status
 if data_handler.connection is None:
     print("Failed to connect to the database.")
 else:
@@ -48,7 +47,6 @@ orderReviewText.grid(row=3, column=0, padx=10, pady=10)
 pizzaPickingLabel=CTkLabel(leftFrame,text='Pick your pizza!',font=('Arial',18,'bold'),width=50)
 pizzaPickingLabel.grid(row=0,column=2,padx=30,pady=10)
 
-# Create the ComboBox with the fetched options
 pizza_options = data_handler.fetch_pizza_options()
 pizzaOptionsBox = CTkComboBox(leftFrame, values=pizza_options)
 pizzaOptionsBox.grid(row=1, column=2, padx=30, pady=10)
@@ -63,33 +61,31 @@ ingredientsText.grid(row=4, column=2, padx=30, pady=10)
 
 
 def showingredient():
-    # Clear the text widget before updating
+    #this function gets the pizza id and checks the ingredients that pizza id has checks if its vegetarian or vegan and displays the final price
     ingredientsText.delete(1.0, tk.END)
 
-    # Get the selected pizza from the ComboBox
     selected_pizza = pizzaOptionsBox.get()
 
-    # Fetch the Pizza ID
     pizza_result = data_handler.get_pizza_id(selected_pizza)
     if not pizza_result:
         ingredientsText.insert(tk.END, f"No pizza found with the name '{selected_pizza}'.")
         return
 
-    pizza_id = pizza_result[0]  # Extract the correct Pizza ID
+    pizza_id = pizza_result[0]  
 
-    # Fetch and display the ingredients
+    
     ingredients = data_handler.get_ingredients(pizza_id)
     if ingredients:
-        # Display all ingredients
-        ingredients_list = "\n".join(ingredients)  # Assuming ingredient[0] is the name
+        
+        ingredients_list = "\n".join(ingredients)  
         ingredientsText.insert(tk.END, f"Ingredients for {selected_pizza}:\n{ingredients_list}\n")
 
-        # Step 1: Check if the pizza is vegan
+        
         is_vegan = data_handler.get_vegeaninfo(pizza_id)
         if is_vegan:
             ingredientsText.insert(tk.END, f"This pizza is vegan.\n")
         else:
-            # Step 2: If not vegan, check if the pizza is vegetarian
+            
             is_vegetarian = data_handler.get_vegetarianinfo(pizza_id)
             if is_vegetarian:
                 ingredientsText.insert(tk.END, f"This pizza is vegetarian.\n")
@@ -102,32 +98,32 @@ def showingredient():
         ingredientsText.insert(tk.END, f"No ingredients found for '{selected_pizza}'.")
 
 def add_to_order_review():
-    # Get the selected pizza and side item
+    #this function adds the picked pizza and if ther is the side item and adds it to the order
     selected_pizza = pizzaOptionsBox.get()
     selected_sideitem = sideOptionsBox.get()
 
-    # Check if something is selected
+    
     if not selected_pizza and not selected_sideitem:
         messagebox.showerror("Error", "Please select at least one item to add to the order.")
         return
 
-    # Add the selected pizza and side item to the order review
+    
     orderReviewText.insert(tk.END, f"Pizza: {selected_pizza}\n")
     orderReviewText.insert(tk.END, f"Side Item: {selected_sideitem}\n")
-    orderReviewText.insert(tk.END, "-"*37 + "\n")  # Divider line for clarity
+    orderReviewText.insert(tk.END, "-"*37 + "\n") 
 
-    # Fetch the Pizza ID
+    
     pizza_result = data_handler.get_pizza_id(selected_pizza)
     if not pizza_result:
         ingredientsText.insert(tk.END, f"No pizza found with the name '{selected_pizza}'.")
         return
 
-    # Add selected pizza to the query list
-    pizza_id = pizza_result[0]  # Extract the correct Pizza ID
-    final_price = data_handler.calculate_pizza_price(pizza_id) # Calculate Price
+    
+    pizza_id = pizza_result[0]  
+    final_price = data_handler.calculate_pizza_price(pizza_id) 
     orderHandlder.addOrderItem(pizza_id, "'Pizza'", final_price)
 
-    # Add selected side menu item to the query list
+    
     side_result = data_handler.get_side_info(selected_sideitem)
     side_id = side_result[0]
     side_price = side_result[2]
@@ -137,12 +133,13 @@ def add_to_order_review():
 
 
 def reset_order_review():
-    # Clear the order review text widget
+    #this resets the order review
     orderReviewText.delete(1.0, tk.END)
     orderHandlder.clear_query()
 
 
 def place_order():
+    #this calls the placeOrder function and opens the new window for order review
     orderHandlder.placeOrder()
     window.destroy()
     import orderReview

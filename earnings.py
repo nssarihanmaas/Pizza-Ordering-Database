@@ -1,8 +1,8 @@
-from connection import create_connection  # Importing the connection from the separate file
+from connection import create_connection  
 
-# Function to print total earnings by customer area codes
+
 def print_earnings_by_area_code():
-    # Use the connection from the imported file
+    
     conn = create_connection()
     cursor = conn.cursor()
 
@@ -38,28 +38,28 @@ def print_earnings_by_area_code():
     cursor.execute(query_earnings_by_age)
     results2 = cursor.fetchall()
 
-    # Print the total earnings by age range
+    # print it by age range
     print("Earnings by Age Range:")
     for row in results2:
         age_range, total_earnings = row
 
         if total_earnings is None:
-            total_earnings = 0.0  # Default to 0.0 if no earnings
+            total_earnings = 0.0
             
         print(f"Age Range: {age_range}, Total Earnings: ${total_earnings:.2f}")
-    # Print the total earnings by area code
+    # print by area code
     print("Earnings by Area Code:")
     for row in results:
         area_code, total_earnings = row
 
         if total_earnings is None:
-            total_earnings = 0.0  # Default to 0.0 if no earnings
+            total_earnings = 0.0
             
         print(f"Area Code: {area_code}, Total Earnings: ${total_earnings:.2f}")
 
-    # Close the cursor and connection after the query
+    
     cursor.close()
     conn.close()
 
-# Call the function to print earnings by area code
+
 print_earnings_by_area_code()

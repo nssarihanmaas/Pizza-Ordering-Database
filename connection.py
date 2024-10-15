@@ -5,7 +5,7 @@ def create_connection():
         connection = mysql.connector.connect(
             host='localhost',
             user='root',
-            password='CemresuAkman1996**',
+            password='',
             database='pizzaorders'
         )
         return connection
@@ -13,6 +13,3 @@ def create_connection():
         print(f"Error: {err}")
         return None
     
-
-    #themostRooty123
-    #CemresuAkman1996**
